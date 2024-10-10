@@ -13,8 +13,8 @@ class Categoria(models.Model):
         verbose_name = 'categoria'
         verbose_name_plural  =  'categorias'
         
-    def _str_(self):
-        return self.name
+    def __str__(self):
+        return self.nome
 
 class Produto(models.Model):
     categoria  =  models.ForeignKey(
