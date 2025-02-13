@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Moderno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="../../static/telaInicial/home.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand fw-bold" href="#">Blog Wag</a>
+            <form class="d-flex">
+                {% if usuario %}
+                <div class="d-flex align-items-center gap-3">
+                    <p class="mb-0">{{ usuario }}</p>
+                    <a href="{% url 'logout' %}" class="btn btn-login bg-danger">Sair</a>
+                </div>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-login">Login</a>
+                {% endif %}
+            </form>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row">
+            {% if admin %}
+            <h1 style="color: red; text-align: center;">Modo Administrador</h1>
+            <div class="text-center mb-4">
+                <a class="btn btn-success" href="{% url 'createPost' %}">Criar postagem</a>
+            </div>
+            {% endif %}
+            {% for postagem in postagens %}
+            <div class="col-md-6 col-lg-4 mb-4">
+                <article class="article-card p-3">
+                    {% if postagem.foto %}
+                    <img src="{{ postagem.foto.url }}" class="img-fluid rounded mb-3" alt="Imagem da postagem">
+                    {% endif %}
+                    
+                    <h2 class="fs-4">{{ postagem.titulo }}</h2>
+                    <p>{{ postagem.descricao }}</p>
+                    <p class="text-muted small">Publicado em {{ postagem.data_hora }}</p>
+                
+                    {% if admin %}
+                    <a href="{% url 'deletePost' postagem.id %}" class="btn btn-danger">
+                        <i class="fa-solid fa-trash"></i> Excluir
+                    </a>
+                    {% endif %}
+                
+                    <!-- Seção de Comentários -->
+                    <div class="mt-4">
+                        <h5><i class="bi bi-chat-left"></i> Comentários:</h5>
+                        <div class="comentarios border rounded p-2 bg-light">
+                            {% for comentario in postagem.comentarios.all %}
+                                <div class="p-2 border-bottom">
+                                    <strong>{{ comentario.usuario.username }}:</strong>
+                                    <p class="mb-1">{{ comentario.texto }}</p>
+                                    <small class="text-muted">{{ comentario.data_hora }}</small>
+                                </div>
+                            {% empty %}
+                                <p class="text-muted">Nenhum comentário ainda. Seja o primeiro a comentar!</p>
+                            {% endfor %}
+                        </div>
+                    </div>
+                
+                    <!-- Formulário para comentar -->
+                    {% if user.is_authenticated %}
+                    <form action="{% url 'comentar' postagem.id %}" method="POST" class="mt-3">
+                        {% csrf_token %}
+                        <textarea name="texto" rows="3" class="form-control" placeholder="Escreva um comentário..." required></textarea>
+                        <button type="submit" class="btn btn-primary mt-2">
+                            <i class="fa-solid fa-paper-plane"></i> Comentar
+                        </button>
+                    </form>
+                    {% else %}
+                    <p class="text-muted mt-2">
+                        <a href="{% url 'login' %}" class="text-primary">Faça login</a> para comentar.
+                    </p>
+                    {% endif %}
+                </article>
+                
+            </div>
+            {% endfor %}
+
+            {% if not postagens %}
+            <div class="text-center py-5">
+                <h2 class="text-muted">Nenhuma postagem encontrada</h2>
+            </div>
+            {% endif %}
+        </div>
+    </main>
+
+    <footer class="text-center">
+        <p>&copy; 2024 Blog Wag. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

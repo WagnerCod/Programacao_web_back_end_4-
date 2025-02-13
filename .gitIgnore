@@ -1,0 +1,16 @@
+*venv/
+.env
+*.env
+
+*__pycache__
+
+
+.vscode/
+.idea/
+*.iml
+
+.vscode/
+.idea/
+*.iml
+*__init__.py
+*virtualShop-main
