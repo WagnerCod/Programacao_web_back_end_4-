@@ -11,12 +11,6 @@ Antes de rodar o projeto, certifique-se de ter instalado em seu sistema:
 
 ## 🚀 **Passo a passo para rodar o projeto**
 
-### **1️⃣ Clonar o repositório**
-Abra o terminal e execute:
-```bash
-[git clone https://github.com/SEU_USUARIO/NOME_REPOSITORIO.git](https://github.com/WagnerCod/Programacao_web_back_end_4-.git)
-cd BlogWag
-```
 
 ### **2️⃣ Criar e ativar o ambiente virtual** (recomendado)
 ```bash
